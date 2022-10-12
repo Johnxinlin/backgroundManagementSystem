@@ -3,8 +3,9 @@
  */
 import store from "store";
 const USER_KEY = "user_key";
+const SELECTED_KEY = "selected_key"
 
-export default {
+const localStore = {
     // 保存user
     saveUser(user) {
         store.set(USER_KEY, user);
@@ -20,4 +21,21 @@ export default {
         // localStorage.removeItem(USER_KEY)
         store.remove(USER_KEY);
     },
+
+    // 保存高亮的子菜单key
+    saveSelectedMenu(key){
+        store.set(SELECTED_KEY, key);
+    },
+
+    // 获取高亮子菜单key
+    getSelectedMenu(){
+        return store.get(SELECTED_KEY) || ""
+    },
+
+    // 删除高亮子菜单key
+    removeSelectedMenu(){
+        store.remove(SELECTED_KEY);
+    }
 };
+
+export default localStore;
