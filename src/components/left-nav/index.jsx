@@ -133,7 +133,6 @@ export default function LeftNav() {
                     items={items}
                     onSelect={
                         (values) => {
-                            console.log(values);
                             values.selectedKeys = ''
                             localStore.saveSelectedMenu(values.key)
                             // getTitle()

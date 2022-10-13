@@ -4,6 +4,7 @@
 import { createHashHistory } from "@remix-run/router";
 import { message } from "antd";
 import jsonp from "jsonp";
+import request from "./request";
 import Request from "./request";
 
 // 用户登录
@@ -30,3 +31,17 @@ export const reqWeather = () => {
     });
 };
 
+// 获取一级/二级分类的列表
+export const reqCategorys = (parentId) => {
+    Request('', {parentId}, 'GET')
+}
+
+// 添加分类
+export const addCategorys = (categoryName, parentID) => {
+    Request('', {categoryName, parentID}, 'POST')
+}
+
+// 更新分类
+export const updateCategorys = (categoryName, parentID) => {
+    Request('', {categoryName, parentID}, 'POST')
+}
