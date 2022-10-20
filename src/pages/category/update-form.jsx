@@ -7,6 +7,7 @@ function UpdateForm(props) {
   const form = useRef()
   const getValue = () => {
     const {getFieldValue, resetFields} = form.current
+
     // console.log(getFieldValue("categoryName"));
     props.setCategoryNameForm(getFieldValue("categoryName"))  // 此处通过父组件传递的函数将子组件的值传递回去
   }
@@ -29,7 +30,7 @@ function UpdateForm(props) {
 
 UpdateForm.propTypes = {
   categoryName: PropTypes.string,
-  setCategoryNameForm: PropTypes.func,
+  setCategoryNameUpdateForm: PropTypes.func,
 }
 
 export default UpdateForm;

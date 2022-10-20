@@ -95,11 +95,10 @@ export default function Category() {
     const [category, setCategory] = useState(data); // 一级分类列表数据
     const [subCategory, setSubCategory] = useState(""); // 二级分类列表数据
     const [loading, setLoading] = useState(false); // 加载界面
-    const [parentId, setParentId] = useState(0); // 父类id
+    const [parentId, setParentId] = useState("0"); // 父类id
     const [categoryName, setCategoryName] = useState(""); // 当前类别名
     const [isModalOpen, setIsModalOpen] = useState(false); // 模态对话框状态
     const [modalStatus, setModalStatus] = useState(0); // 0 表示添加分类 1 表示更新分类
-
     const title =
         parentId == "0" ? (
             "一级分类列表"
@@ -155,16 +154,23 @@ export default function Category() {
     };
 
     // 获取更新后的类名（通过子组件传递上来）
-    const setCategoryNameForm = (name) => {
+    const setCategoryNameUpdateForm = (name) => {
         setCategoryName(name)
     }
+
+    // 获取更新后的类名（通过子组件传递上来）
+    const setCategoryNameAddForm = (name, id) => {
+        setCategoryName(name)
+        setParentId(id)
+    }
+
 
     // 关闭模态对话框并请求数据
     const handleOk = async() => {
         setIsModalOpen(false);
 
         if( modalStatus == 0){// 进行添加操作
-            const result = await addCategorys()
+            const result = await addCategorys(categoryName, parentId)
         }else{// 进行更新操作
             // console.log(categoryName);
             const result = await updateCategorys(categoryName, category._id)
@@ -182,6 +188,7 @@ export default function Category() {
                     <Button
                         type="primary"
                         onClick={() => {
+                            // 展示添加对话框
                             setModalStatus(0);
                             showModal();
                         }}
@@ -198,10 +205,11 @@ export default function Category() {
                     open={isModalOpen}
                     onOk={handleOk}
                     onCancel={handleCancel}
+                    okButtonProps={{htmlType: "submit"}}
                 >
                     {!modalStatus ? 
-                    <AddForm />
-                    : <UpdateForm categoryName={categoryName} setCategoryNameForm = {setCategoryNameForm}/>}
+                    <AddForm categorys={category} parentId={parentId} setCategoryAddForm={setCategoryNameAddForm}/>
+                    : <UpdateForm categoryName={categoryName} setCategoryNameUpdateForm = {setCategoryNameUpdateForm}/>}
                 </Modal>
                 <Table
                     dataSource={parentId == "0" ? category : subCategory}

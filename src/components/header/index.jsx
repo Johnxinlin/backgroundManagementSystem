@@ -3,6 +3,7 @@ import {  Modal } from 'antd';
 import { ExclamationCircleOutlined  } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./index.less";
+import PubSub from "pubsub-js";
 import memoryUtils from "../../utils/memoryUtils";
 import localStore from "../../utils/storageUtils";
 import { reqWeather } from "../../api";
@@ -13,10 +14,29 @@ export default function Header() {
     const [currentTime, setCurrentTime] = useState(formateDate(Date.now()));
     const [weather, setWeather] = useState("");
     const [temperature, setTemperature] = useState("");
-    const [title, setTitle] = useState("Home");
+    const [title, setTitle] = useState("首页");
     const navigate = useNavigate()
     
     const { confirm } = Modal;
+    // 侧边栏标题
+    const titleDict = {
+      'home':"首页",
+      'category':"品类管理",
+      'product':"商品管理",
+      'user':"用户管理",
+      'role':"角色管理",
+      'bar':"相关数据（柱形图）",
+      'line':"相关数据（折线图）",
+      'pie':"相关数据（饼图）"
+    }
+
+    // 获取侧边栏标题
+    const getTitle = () => {
+      PubSub.subscribe('title', (_, stateObj) => {
+        setTitle(titleDict[stateObj.title])
+      })  
+    }
+
     // 确认对话框
     const showConfirm = () => {
       confirm({
@@ -52,6 +72,7 @@ export default function Header() {
         }, 1000);
         // const {temperature, weather} = getWeather()
         getWtAndTemp()
+        getTitle()
         
     }, []);
     return (
@@ -61,7 +82,7 @@ export default function Header() {
                 <LinkButton onClick={showConfirm}>退出</LinkButton>
             </div>
             <div className="header-bottom">
-                <div className="header-bottom-left">首页</div>
+                <div className="header-bottom-left">{title}</div>
                 <div className="header-bottom-right">
                     <span>{currentTime} {temperature}℃</span>
                     <img

@@ -18,6 +18,8 @@ import "./index.less";
 import logo from "./images/马卡龙.png";
 import localStore from "../../utils/storageUtils";
 
+const req = /\/([a-zA-Z0-9]+)$/ // 匹配路由标题
+
 function getItem(label, key, icon, children, type) {
     return {
         key,
@@ -28,13 +30,20 @@ function getItem(label, key, icon, children, type) {
     };
 }
 
+const linkClick = (event) => {
+    console.log(event.target.href);
+    console.log(req.exec(event.target.href)[1]);
+    const title = req.exec(event.target.href)[1]
+    PubSub.publish('title', {title:title})
+}
+
 const items = [
     getItem(
         "首页",
         "home",
         <div>
             <HomeOutlined />
-            <Link to="./home" />
+            <Link to="./home" onClick={linkClick}/>
         </div>
     ),
     getItem("商品", "sub1", <MailOutlined />, [
@@ -43,7 +52,7 @@ const items = [
             "catagory",
             <div>
                 <BarsOutlined />
-                <Link to="./category" />
+                <Link to="./category" onClick={linkClick} />
             </div>
         ),
         getItem(
@@ -51,7 +60,7 @@ const items = [
             "product",
             <div>
                 <AccountBookOutlined />
-                <Link to="./product" />
+                <Link to="./product" onClick={linkClick}/>
             </div>
         ),
     ]),
@@ -60,7 +69,7 @@ const items = [
         "user",
         <div>
             <TeamOutlined />
-            <Link to="./user" />
+            <Link to="./user" onClick={linkClick}/>
         </div>
     ),
     getItem(
@@ -68,7 +77,7 @@ const items = [
         "role",
         <div>
             <UserOutlined />
-            <Link to="./role" />
+            <Link to="./role" onClick={linkClick}/>
         </div>
     ),
     getItem(
@@ -81,7 +90,7 @@ const items = [
                 "bar",
                 <div>
                     <BarChartOutlined />
-                    <Link to="./charts/bar" />
+                    <Link to="./charts/bar" onClick={linkClick} />
                 </div>
             ),
             getItem(
@@ -89,7 +98,7 @@ const items = [
                 "line",
                 <div>
                     <LineChartOutlined />
-                    <Link to="./charts/line" />
+                    <Link to="./charts/line" onClick={linkClick}/>
                 </div>
             ),
             getItem(
@@ -97,7 +106,7 @@ const items = [
                 "pie",
                 <div>
                     <PieChartOutlined />
-                    <Link to="./charts/pie" />
+                    <Link to="./charts/pie" onClick={linkClick}/>
                 </div>
             ),            
         ]
@@ -105,14 +114,6 @@ const items = [
 ];
 
 export default function LeftNav() {
-    // const location = useLocation()
-    // const req = /\/([a-zA-Z0-9]+)$/
-    // // 获取并设置标题
-    // const getTitle = () => {
-    //     setTitle(req.exec(location.pathname)[1])
-    //     console.log(req.exec(location.pathname)[1]);
-    //     PubSub.publish('title', {title:title})
-    //   }
 
     return (
         <div className="left-nav">
@@ -133,13 +134,14 @@ export default function LeftNav() {
                     items={items}
                     onSelect={
                         (values) => {
-                            values.selectedKeys = ''
+                            // values.selectedKeys = ''
+                            console.log(values);
                             localStore.saveSelectedMenu(values.key)
                             // getTitle()
                             // sendPath()
                         }}
                     onOpenChange = {(values) => {
-                        console.log(values[values.length - 1]);
+                        // console.log(values[values.length - 1]);
                         localStore.saveSelectedMenu(values[values.length - 1]);
                     }}
                     

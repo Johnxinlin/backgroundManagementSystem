@@ -10,13 +10,13 @@ const {Footer, Sider, Content } = Layout;
 export default function Admin() {
 
   return (
-    <Layout style={{height:'100%'}}>
+    <Layout style={{minHeight:'100%'}}>
     <Sider>
       <LeftNav></LeftNav>
     </Sider>
     <Layout>
       <Header>Header</Header>
-      <Content style={{"padding": "5px", "backgroundColor": "#fff"}}>
+      <Content style={{"padding": "5px", "backgroundColor": "#ddd"}}>
         <Outlet/>
       </Content>
       <Footer style={{textAlign: 'center', color:'#ccc'}}>Footer</Footer>

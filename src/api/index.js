@@ -45,3 +45,37 @@ export const addCategorys = (categoryName, parentID) => {
 export const updateCategorys = (categoryName, parentID) => {
     Request('', {categoryName, parentID}, 'POST')
 }
+
+// 请求商品列表
+export const reqProducts = (pageNum, pageSize) => {
+    Request('', {pageNum, pageSize}, 'GET')
+}
+
+// 搜索商品分类列表
+export const reqSearchProducts = ({pageNum, pageSize, searchName, searchType}) => {
+    Request('', {
+        pageNum,
+        pageSize,
+        [searchType]: searchName   // 想要让变量的值作为属性得上中括号
+    }, 'GET')
+}
+
+// 根据categoryId获取商品分类
+export const reqCategoryName = categoryId => {
+    Request('', {categoryId})
+}
+
+//  更新商品的状态（上架/下架)
+export const reqUpdateStatus = (productId, status) => {
+    Request('', {productId, status}, 'POST')
+}
+
+// 删除图片
+export const reqDeleteImage = (name) => {
+    Request('', {name}, 'POST')
+}
+
+// 添加或修改商品
+export const reqAddOrUpdateProduct = (product) => {
+    Request('/manage/product/' + (product._id ? 'update': 'add'), product, 'POST')
+}

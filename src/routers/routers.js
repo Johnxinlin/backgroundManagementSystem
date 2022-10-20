@@ -9,6 +9,9 @@ import User from '../pages/user/user'
 import Bar from '../pages/charts/bar'
 import Line from '../pages/charts/line'
 import Pie from '../pages/charts/pie'
+import ProductAddUpdate from '../pages/product/add-update'
+import ProductDetail from '../pages/product/detail'
+import ProductHome from '../pages/product/home'
 const routers = [
     {
         path: '/login',
@@ -28,7 +31,25 @@ const routers = [
             },
             {
                 path: 'product',
-                element: <Product/>
+                element: <Product/>,
+                children:[
+                    {
+                        path: 'home',
+                        element: <ProductHome/>
+                    },
+                    {
+                        path: 'detail',
+                        element: <ProductDetail/>
+                    },
+                    {
+                        path: 'add_update',
+                        element: <ProductAddUpdate/>
+                    },
+                    {
+                        path: '',
+                        element: <Navigate to='home'/>
+                    },
+                ]
             },
             {
                 path: 'role',
