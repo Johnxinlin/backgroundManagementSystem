@@ -5,15 +5,14 @@ import { createHashHistory } from "@remix-run/router";
 import { message } from "antd";
 import jsonp from "jsonp";
 import request from "./request";
-import Request from "./request";
 
 // 用户登录
 export const Login = (username, password) =>
-    Request("/user/login/", { username, password }, "POST");
+    request("/user/login/", { username, password }, "POST");
 
 // 添加用户
 export const reqAddUser = (userInfo) =>
-    Request("/manage/user/add", userInfo, "POST");
+    request("/manage/user/add", userInfo, "POST");
 
 // json接口请求函数
 export const reqWeather = () => {
@@ -33,27 +32,27 @@ export const reqWeather = () => {
 
 // 获取一级/二级分类的列表
 export const reqCategorys = (parentId) => {
-    Request('', {parentId}, 'GET')
+    request('', {parentId}, 'GET')
 }
 
 // 添加分类
 export const addCategorys = (categoryName, parentID) => {
-    Request('', {categoryName, parentID}, 'POST')
+    request('', {categoryName, parentID}, 'POST')
 }
 
 // 更新分类
 export const updateCategorys = (categoryName, parentID) => {
-    Request('', {categoryName, parentID}, 'POST')
+    request('', {categoryName, parentID}, 'POST')
 }
 
 // 请求商品列表
 export const reqProducts = (pageNum, pageSize) => {
-    Request('', {pageNum, pageSize}, 'GET')
+    request('', {pageNum, pageSize}, 'GET')
 }
 
 // 搜索商品分类列表
 export const reqSearchProducts = ({pageNum, pageSize, searchName, searchType}) => {
-    Request('', {
+    request('', {
         pageNum,
         pageSize,
         [searchType]: searchName   // 想要让变量的值作为属性得上中括号
@@ -62,20 +61,35 @@ export const reqSearchProducts = ({pageNum, pageSize, searchName, searchType}) =
 
 // 根据categoryId获取商品分类
 export const reqCategoryName = categoryId => {
-    Request('', {categoryId})
+    request('', {categoryId})
 }
 
 //  更新商品的状态（上架/下架)
 export const reqUpdateStatus = (productId, status) => {
-    Request('', {productId, status}, 'POST')
+    request('', {productId, status}, 'POST')
 }
 
 // 删除图片
 export const reqDeleteImage = (name) => {
-    Request('', {name}, 'POST')
+    request('', {name}, 'POST')
 }
 
 // 添加或修改商品
 export const reqAddOrUpdateProduct = (product) => {
-    Request('/manage/product/' + (product._id ? 'update': 'add'), product, 'POST')
+    request('/manage/product/' + (product._id ? 'update': 'add'), product, 'POST')
+}
+
+// 获取所有角色的列表
+export const reqRoles = () => {
+    request('/manage/roles')
+}
+
+// 添加角色
+export const reqAddRole = (name) => {
+    request('/manage/role/add', {name}, 'POST')
+}
+
+// 更新角色
+export const reqUpdateRole = (menus) => {
+    request('/manage/role/update', {menus}, 'POST')
 }
