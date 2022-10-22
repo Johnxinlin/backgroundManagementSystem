@@ -1,16 +1,18 @@
-import React, {useRef} from 'react'
+import React, {useRef, forwardRef, useImperativeHandle} from 'react'
 import PropTypes from 'prop-types'
-import { Form, Button, Input } from 'antd';
+import { Form,  Input } from 'antd';
 
 const {Item} = Form
-function UpdateForm(props) {
+const UpdateForm = forwardRef((props, ref) => {
   const form = useRef()
   const getValue = () => {
-    const {getFieldValue, resetFields} = form.current
-
+    const {getFieldValue} = form.current
     // console.log(getFieldValue("categoryName"));
     props.setCategoryNameForm(getFieldValue("categoryName"))  // 此处通过父组件传递的函数将子组件的值传递回去
   }
+  useImperativeHandle(ref, () => ({
+    reset: form.current.resetFields
+  }))
 
   return (
     <Form onFinish={(values) => {props.onFinish(values)}} ref = {form} >
@@ -26,7 +28,7 @@ function UpdateForm(props) {
       </Item> */}
     </Form>
   );
-}
+})
 
 UpdateForm.propTypes = {
   categoryName: PropTypes.string,

@@ -17,7 +17,7 @@ export default function request(url, data = {}, type){
             resolve(response)
         }).catch(error => {// 3. 如果失败了，调用reject(error)
             console.error("error: ", error.response.data.error);
-            message.error('请求出错了：' + error.response.data.error)
+            message.error('请求出错了o(╥﹏╥)o：' + error.response.data.error)
         })
 
         

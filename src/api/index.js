@@ -1,7 +1,6 @@
 /*
     包含应用中所有请求函数的模块
 */
-import { createHashHistory } from "@remix-run/router";
 import { message } from "antd";
 import jsonp from "jsonp";
 import request from "./request";
@@ -9,10 +8,6 @@ import request from "./request";
 // 用户登录
 export const Login = (username, password) =>
     request("/user/login/", { username, password }, "POST");
-
-// 添加用户
-export const reqAddUser = (userInfo) =>
-    request("/manage/user/add", userInfo, "POST");
 
 // json接口请求函数
 export const reqWeather = () => {
@@ -92,4 +87,19 @@ export const reqAddRole = (name) => {
 // 更新角色
 export const reqUpdateRole = (menus) => {
     request('/manage/role/update', {menus}, 'POST')
+}
+
+// 获取用户列表
+export const reqUsersList = () => {
+    request('/manage/user/list')
+}
+
+// 删除用户
+export const reqDeleteUser = (userId) => {
+    request('/manage/user/delete', {userId}, 'POST')
+}
+
+// 添加或更新用户
+export const reqAddOrUpdateUser = (user) => {
+    request('/manage/user/' + (user.password ? 'add' : 'update'), user, 'POST')
 }

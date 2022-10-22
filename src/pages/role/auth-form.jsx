@@ -20,7 +20,7 @@ const treeData = [
         },
         {
           title: '商品',
-          key: '1',
+          key: '/products',
           children: [
             {
               title: '品类管理',
@@ -110,7 +110,7 @@ const treeData = [
 // const treeData = getTreeNode(menuList)
 
 const { Item } = Form;
-function AuthForm(props, ref) {
+const AuthForm = forwardRef((props, ref)  => {
     const treeNodes = useRef();
 
     console.log("AuthForm()",props.role.name);
@@ -150,11 +150,11 @@ function AuthForm(props, ref) {
         </Form>
         
     );
-}
+})
 
 AuthForm.propTypes = {
     setForm: PropTypes.func,
     role: PropTypes.object
 };
 
-export default forwardRef(AuthForm);
+export default AuthForm;

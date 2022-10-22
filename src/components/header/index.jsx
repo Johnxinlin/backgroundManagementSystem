@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {  Modal } from 'antd';
 import { ExclamationCircleOutlined  } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./index.less";
-import PubSub from "pubsub-js";
+// import PubSub from "pubsub-js";
 import memoryUtils from "../../utils/memoryUtils";
 import localStore from "../../utils/storageUtils";
 import { reqWeather } from "../../api";
@@ -16,6 +16,8 @@ export default function Header() {
     const [temperature, setTemperature] = useState("");
     const [title, setTitle] = useState("首页");
     const navigate = useNavigate()
+    let location = useLocation()
+    // console.log(pathname.slice(pathname.lastIndexOf('/') + 1, pathname.length)); 
     
     const { confirm } = Modal;
     // 侧边栏标题
@@ -32,9 +34,19 @@ export default function Header() {
 
     // 获取侧边栏标题
     const getTitle = () => {
-      PubSub.subscribe('title', (_, stateObj) => {
-        setTitle(titleDict[stateObj.title])
-      })  
+
+      /**通过订阅发布模式获取 */ 
+      // PubSub.subscribe('title', (_, stateObj) => {
+      //   setTitle(titleDict[stateObj.title])
+      // })  
+
+      /**通过useLocation从路由中获取 */
+      // const pathname = location.pathname
+      // setTitle(titleDict[pathname.slice(pathname.lastIndexOf('/') + 1, pathname.length)]) 通过useLocation方式也可
+
+      // 通过localstore获取，如此刷新也不会重置
+      const title = localStore.getSelectedMenu()
+      setTitle(titleDict[title.slice(1, title.length)])
     }
 
     // 确认对话框
@@ -73,8 +85,7 @@ export default function Header() {
         // const {temperature, weather} = getWeather()
         getWtAndTemp()
         getTitle()
-        
-    }, []);
+    }, [location]);
     return (
         <div className="header">
             <div className="header-top">

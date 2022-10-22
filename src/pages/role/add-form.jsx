@@ -9,7 +9,7 @@ import { reqAddRole} from "../../api";
 
 
 const { Item } = Form;
-function AddForm(props, ref) {
+const AddForm = forwardRef((props, ref) => {
     const formAdd = useRef();
 
     useImperativeHandle(ref, () => ({
@@ -52,7 +52,7 @@ function AddForm(props, ref) {
                     }
                 });
         },
-    }));
+    }))
 
     return (
         <Form ref={formAdd}>
@@ -71,10 +71,10 @@ function AddForm(props, ref) {
 
         </Form>
     );
-}
+})
 
 AddForm.propTypes = {
     setForm: PropTypes.func,
 };
 
-export default forwardRef(AddForm);
+export default AddForm;

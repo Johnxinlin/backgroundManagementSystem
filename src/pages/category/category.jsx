@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Card, Table, Button, message, Modal } from "antd";
 import { PlusOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-button";
@@ -12,7 +12,6 @@ export default function Category() {
             title: "Name",
             dataIndex: "name",
             key: "name",
-            render: (text) => <a>{text}</a>,
         },
 
         {
@@ -31,7 +30,7 @@ export default function Category() {
                         >
                             修改分类
                         </LinkButton>
-                        {parentId == "0" ? (
+                        {parentId === "0" ? (
                             <LinkButton
                                 onClick={() => {
                                     showSubCategorys(text);
@@ -92,6 +91,8 @@ export default function Category() {
         },
     ];
 
+    const addform = useRef()
+    const updateform = useRef()
     const [category, setCategory] = useState(data); // 一级分类列表数据
     const [subCategory, setSubCategory] = useState(""); // 二级分类列表数据
     const [loading, setLoading] = useState(false); // 加载界面
@@ -151,6 +152,13 @@ export default function Category() {
     // 展示模态对话框
     const showModal = () => {
         setIsModalOpen(true);
+        setTimeout(() => {
+            if(!modalStatus){
+                addform.current.reset() 
+            }else{
+                updateform.current.reset()
+            }
+        }, 100)
     };
 
     // 获取更新后的类名（通过子组件传递上来）
@@ -169,15 +177,28 @@ export default function Category() {
     const handleOk = async() => {
         setIsModalOpen(false);
 
-        if( modalStatus == 0){// 进行添加操作
+        if( modalStatus === 0){// 进行添加操作
             const result = await addCategorys(categoryName, parentId)
+            if(result.status && result.status === 0){
+                message.success("添加品类成功")
+            }
         }else{// 进行更新操作
             // console.log(categoryName);
             const result = await updateCategorys(categoryName, category._id)
+            if(result.status && result.status === 0){
+                message.success("更新成功")
+            }
         }
     };
     const handleCancel = () => {
         setIsModalOpen(false);
+        // 更新表单字段
+        if(!modalStatus){
+            addform.current.reset() 
+        }else{
+            updateform.current.reset()
+        }
+        
     };
 
     return (
@@ -208,11 +229,11 @@ export default function Category() {
                     okButtonProps={{htmlType: "submit"}}
                 >
                     {!modalStatus ? 
-                    <AddForm categorys={category} parentId={parentId} setCategoryAddForm={setCategoryNameAddForm}/>
-                    : <UpdateForm categoryName={categoryName} setCategoryNameUpdateForm = {setCategoryNameUpdateForm}/>}
+                    <AddForm categorys={category} parentId={parentId} setCategoryAddForm={setCategoryNameAddForm} ref={addform}/>
+                    : <UpdateForm categoryName={categoryName} setCategoryNameUpdateForm = {setCategoryNameUpdateForm} ref={updateform}/>}
                 </Modal>
                 <Table
-                    dataSource={parentId == "0" ? category : subCategory}
+                    dataSource={parentId === "0" ? category : subCategory}
                     columns={columns}
                     loading={loading}
                     pagination={{
