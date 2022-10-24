@@ -166,7 +166,7 @@ export default function ProductHome() {
             showQuickJumper: true,
             defaultPageSize: PAGE_SIZE,
             total:{total},
-            onChange:getProducts
+            onChange:getProducts,
         }}
         />;
     </Card>

@@ -1,15 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu } from "antd";
-import PubSub from "pubsub-js";
 import "./index.less";
 import logo from "./images/马卡龙.png";
 import localStore from "../../utils/storageUtils";
 import menuIconList from "../../config/menuIconConfig";
 import menuList from "../../config/menuConfig";
 import memoryUtils from "../../utils/memoryUtils";
+import { connect } from "react-redux";
+import { menuListClickAction } from "../../redux/actions";
 
-const req = /\/([a-zA-Z0-9]+)$/; // 匹配路由标题
+// 侧边栏标题
+const titleDict = {
+    "/home": "首页",
+    "/category": "品类管理",
+    "/product": "商品管理",
+    "/user": "用户管理",
+    "/role": "角色管理",
+    "/charts/bar": "相关数据（柱形图）",
+    "/charts/line": "相关数据（折线图）",
+    "/charts/pie": "相关数据（饼图）",
+};
 
 // 配置菜单项
 function getItem(label, key, icon, children, type) {
@@ -106,7 +117,9 @@ function getItem(label, key, icon, children, type) {
 //     ),
 // ];
 
-export default function LeftNav() {
+const LeftNav = (props) => {
+    let location = useLocation()
+    console.log(location);
 
     // 判断当前登陆用户对item是否有权限 实现根据用户权限展示菜单栏
     const hasAuth = (item) => {
@@ -131,6 +144,7 @@ export default function LeftNav() {
 
     // 根据配置项动态创建菜单栏
     const createMenu = (menuList) => {
+        const path = location.pathname
         return menuList.reduce((pre, item) => {
 
             // 配置好接口时使用
@@ -148,6 +162,13 @@ export default function LeftNav() {
             //     );
             // }
             
+            // 由于刷新的时候会发生标题错误的情况,在动态生成菜单时，取得其Key
+            if(!item.children){
+                if(path.indexOf(item.key) !== -1 ){
+                    props.menuClick(titleDict[item.key])
+                    console.log(path.indexOf(item.key), item.key, path );
+                }
+            }
             pre.push(
                 getItem(
                     item.title,
@@ -158,8 +179,7 @@ export default function LeftNav() {
                     </div>,
                     item.children ? createMenu(item.children) : null
                 )
-            );
-            
+            );      
             return pre;
         }, []);
     };
@@ -183,11 +203,12 @@ export default function LeftNav() {
                     theme="dark"
                     items={dynamicItems}
                     onSelect={(values) => {
-                        console.log("left-nav Menu组件 onSelect(): ",values);
+                        console.log("left-nav Menu组件 onSelect(): ",values, titleDict[values.key]);
                         localStore.saveSelectedMenu(values.key);
-
+                        props.menuClick(titleDict[values.key])
                     }}
                     onOpenChange={(values) => {
+                        console.log("left-nav Menu组件 onOpenChange(): ", values );
                         localStore.saveSelectedMenu(values[values.length - 1]);
                     }}
                 />
@@ -195,3 +216,8 @@ export default function LeftNav() {
         </div>
     );
 }
+
+export default connect(
+    state => ({title:state.headTitle}),
+    {menuClick:menuListClickAction} 
+)(LeftNav)
