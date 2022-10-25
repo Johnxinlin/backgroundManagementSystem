@@ -5,11 +5,11 @@ import { reqRoles, reqUpdateRole } from "../../api";
 import formateDate from "../../utils/formatDate";
 import AddForm from "./add-form";
 import AuthForm from "./auth-form"
-import memoryUtils from "../../utils/memoryUtils";
-import localStore from "../../utils/storageUtils";
-import { useNavigate } from "react-router-dom";
-export default function Role() {
-    const navigate = useNavigate()
+import { connect } from "react-redux";
+import { loginOutAction } from "../../redux/actions";
+
+const Role = (props) => {
+
     const addForm = useRef();
     const authForm = useRef(); 
     const [roles, setRoles] = useState(
@@ -119,10 +119,8 @@ export default function Role() {
             setRole({...role, menus: menus, auth_time: Date.now()})
             message.success("权限更改成功")
             // 如果更改的是当前用户的权限，则强制退出
-            if(role._id === memoryUtils.user.role_id){
-                memoryUtils.user = {}
-                localStore.removeUser()
-                navigate('../../login')
+            if(role._id === props.user.role_id){
+                props.loginOut()
                 message.success("当前用户权限改变，请重新登陆")
             }
         }else{
@@ -223,3 +221,8 @@ export default function Role() {
         </Card>
     );
 }
+
+export default connect(
+    state => ({user: state.user}),
+    {loginOut: loginOutAction}
+)(Role)

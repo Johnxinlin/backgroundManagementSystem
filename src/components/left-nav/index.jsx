@@ -6,7 +6,6 @@ import logo from "./images/马卡龙.png";
 import localStore from "../../utils/storageUtils";
 import menuIconList from "../../config/menuIconConfig";
 import menuList from "../../config/menuConfig";
-import memoryUtils from "../../utils/memoryUtils";
 import { connect } from "react-redux";
 import { menuListClickAction } from "../../redux/actions";
 
@@ -118,15 +117,14 @@ function getItem(label, key, icon, children, type) {
 // ];
 
 const LeftNav = (props) => {
-    let location = useLocation()
-    console.log(location);
+    let location = useLocation();
+    // console.log("left-nav location: ",location);
 
     // 判断当前登陆用户对item是否有权限 实现根据用户权限展示菜单栏
     const hasAuth = (item) => {
         const key = item.key;
-        const menus = memoryUtils.user.role.menus;
-        console.log(menus);
-        const username = memoryUtils.user.username;
+        const menus = props.user.role.menus;
+        const username = props.user.name;
         // 如果用户为admin
         if (
             username === "admin" ||
@@ -144,9 +142,8 @@ const LeftNav = (props) => {
 
     // 根据配置项动态创建菜单栏
     const createMenu = (menuList) => {
-        const path = location.pathname
+        const path = location.pathname;
         return menuList.reduce((pre, item) => {
-
             // 配置好接口时使用
             // if (hasAuth(item)) {
             //     pre.push(
@@ -161,12 +158,17 @@ const LeftNav = (props) => {
             //         )
             //     );
             // }
-            
+
             // 由于刷新的时候会发生标题错误的情况,在动态生成菜单时，取得其Key
-            if(!item.children){
-                if(path.indexOf(item.key) !== -1 ){
-                    props.menuClick(titleDict[item.key])
-                    console.log(path.indexOf(item.key), item.key, path );
+            if (!item.children) {
+                if (path.indexOf(item.key) !== -1) {
+                    props.menuClick(titleDict[item.key]);
+                    console.log(
+                        "left-nav createMenu(): ",
+                        path.indexOf(item.key),
+                        item.key,
+                        path
+                    );
                 }
             }
             pre.push(
@@ -175,11 +177,11 @@ const LeftNav = (props) => {
                     item.key,
                     <div>
                         {menuIconList[item.key]}
-                        <Link to={"." + item.key}  />
+                        <Link to={"." + item.key} />
                     </div>,
                     item.children ? createMenu(item.children) : null
                 )
-            );      
+            );
             return pre;
         }, []);
     };
@@ -203,21 +205,28 @@ const LeftNav = (props) => {
                     theme="dark"
                     items={dynamicItems}
                     onSelect={(values) => {
-                        console.log("left-nav Menu组件 onSelect(): ",values, titleDict[values.key]);
+                        console.log(
+                            "left-nav Menu组件 onSelect(): ",
+                            values,
+                            titleDict[values.key]
+                        );
                         localStore.saveSelectedMenu(values.key);
-                        props.menuClick(titleDict[values.key])
+                        props.menuClick(titleDict[values.key]);
                     }}
                     onOpenChange={(values) => {
-                        console.log("left-nav Menu组件 onOpenChange(): ", values );
+                        console.log(
+                            "left-nav Menu组件 onOpenChange(): ",
+                            values
+                        );
                         localStore.saveSelectedMenu(values[values.length - 1]);
                     }}
                 />
             </div>
         </div>
     );
-}
+};
 
 export default connect(
-    state => ({title:state.headTitle}),
-    {menuClick:menuListClickAction} 
-)(LeftNav)
+    (state) => ({ title: state.headTitle, user: state.user }),
+    { menuClick: menuListClickAction }
+)(LeftNav);

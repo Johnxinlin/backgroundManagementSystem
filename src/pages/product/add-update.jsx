@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Card, Form, Input, Cascader, Upload, Button, InputNumber, message } from "antd";
+import { Card, Form, Input, Cascader,  Button, InputNumber, message } from "antd";
 import LinkButton from "../../components/link-button";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { reqAddOrUpdateProduct, reqCategorys } from "../../api";
@@ -37,7 +37,7 @@ export default function ProductAddUpdate() {
 
     useEffect(() => {
         getOptions("0");
-    }, []);
+    });
     const title = (
         <span>
             <LinkButton

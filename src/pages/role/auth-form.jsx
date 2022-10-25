@@ -4,9 +4,8 @@ import React, {
     useImperativeHandle,
 
 } from "react";
-import { Form, Input, Button, message, Tree } from "antd";
+import { Form, Input, Tree } from "antd";
 import PropTypes from "prop-types";
-import menuList from "../../config/menuConfig";
 
 //  静态展示树图
 const treeData = [

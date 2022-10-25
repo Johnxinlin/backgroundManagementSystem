@@ -13,7 +13,7 @@ export default function ProductDetail() {
   // console.log(product);
   useEffect(() => {
     getCName()
-  }, [])
+  })
 
   const getCName = async() => {
     const {categoryId, pCategoryId} = product
@@ -67,7 +67,7 @@ export default function ProductDetail() {
           <span className="left">商品图片：</span>
           <span className='right'>
             {product.imgs.map((value)=>{
-              <img key={value} src={value} alt="商品图片" className='product-img'/>
+              return (<img key={value} src={value} alt="商品图片" className='product-img'/>)
             })}
             <img  src="" alt="商品图片" className='product-img'/>
             

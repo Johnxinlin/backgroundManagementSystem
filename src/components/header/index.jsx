@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import "./index.less";
-// import PubSub from "pubsub-js";
-import memoryUtils from "../../utils/memoryUtils";
 import localStore from "../../utils/storageUtils";
 import { reqWeather } from "../../api";
 import formateDate from "../../utils/formatDate";
 import LinkButton from "../link-button";
+import { loginOutAction } from "../../redux/actions";
 
 const Header = (props) => {
     const [currentTime, setCurrentTime] = useState(formateDate(Date.now()));
     const [weather, setWeather] = useState("");
     const [temperature, setTemperature] = useState("");
     const [title, setTitle] = useState("首页");
-    const navigate = useNavigate();
     let location = useLocation();
     // console.log(pathname.slice(pathname.lastIndexOf('/') + 1, pathname.length));
 
@@ -76,9 +74,7 @@ const Header = (props) => {
             icon: <ExclamationCircleOutlined />,
             content: "Some descriptions",
             onOk() {
-                console.log("OK");
-                localStore.removeUser();
-                navigate("/login");
+                props.loginOut()
             },
             onCancel() {
                 console.log("Cancel");
@@ -102,15 +98,13 @@ const Header = (props) => {
             const currentTime = formateDate(Date.now());
             setCurrentTime(currentTime);
         }, 1000);
-        // const {temperature, weather} = getWeather()
         getWtAndTemp();
-        // getTitle();
         console.log(location);
     }, [location]);
     return (
         <div className="header">
             <div className="header-top">
-                <span>欢迎, {memoryUtils.user.username}</span>
+                <span>欢迎, {props.username}</span>
                 <LinkButton onClick={showConfirm}>退出</LinkButton>
             </div>
             <div className="header-bottom">
@@ -131,6 +125,6 @@ const Header = (props) => {
 }
 
 export default connect(
-    state => ({title:state.headTitle}),
-    {}
+    state => ({title:state.headTitle, username: state.user.name}),
+    {loginOut: loginOutAction}
 )(Header)

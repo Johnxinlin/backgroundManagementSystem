@@ -65,7 +65,7 @@ export default function Category() {
             parentId: "0",
             _id: "1331",
         },
-    ];
+    ]; 
 
     const subData = [
         {
@@ -101,7 +101,7 @@ export default function Category() {
     const [isModalOpen, setIsModalOpen] = useState(false); // 模态对话框状态
     const [modalStatus, setModalStatus] = useState(0); // 0 表示添加分类 1 表示更新分类
     const title =
-        parentId == "0" ? (
+        parentId === "0" ? (
             "一级分类列表"
         ) : (
             <span>
@@ -119,7 +119,7 @@ export default function Category() {
 
     useEffect(() => {
         getCategory();
-    }, []);
+    });
 
     // 获取一级分类列表数据
     const getCategory = async () => {

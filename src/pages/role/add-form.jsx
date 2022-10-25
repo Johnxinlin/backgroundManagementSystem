@@ -17,7 +17,7 @@ const AddForm = forwardRef((props, ref) => {
             formAdd.current.resetFields();
         },
         validate: () => {
-            const { getFieldValue, resetFields, validateFields } =
+            const { resetFields, validateFields } =
                 formAdd.current;
             validateFields()
                 .then(async(value) => {

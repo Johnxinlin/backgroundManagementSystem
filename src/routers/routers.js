@@ -34,7 +34,7 @@ const routers = [
                 element: <Product/>,
                 children:[
                     {
-                        path: 'home',
+                        path: 'main',
                         element: <ProductHome/>
                     },
                     {
@@ -47,7 +47,7 @@ const routers = [
                     },
                     {
                         path: '',
-                        element: <Navigate to='home'/>
+                        element: <Navigate to='main'/>
                     },
                 ]
             },

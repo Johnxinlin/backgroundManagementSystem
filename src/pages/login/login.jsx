@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { Button, Form, Input, message } from "antd";
-import { Login } from "../../api";
+// import { login } from "../../api";
 import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
+// import storageUtils from "../../utils/storageUtils";
 import { withNavigation } from "../../components/withNavigation";
 import "./login.less";
 import logo from "./images/马卡龙.png";
+import { connect } from "react-redux";
+import { loginAction } from "../../redux/actions";
 
 
 const Item = Form.Item;
 
 
-class login extends Component {
+class Login extends Component {
     
     // 登录表单提交完成事件
     onFinish = (values) => {
@@ -22,19 +24,19 @@ class login extends Component {
                 async(value) => {
                     if (/^[a-zA-Z0-9_]+$/.test(value.password)) {
                         // 请求登录
-                        let result = await Login(value.username, value.password)
-                        if(result.status === 200 && !result.data.error){
-                            console.log(result);
-                            message.success("登录成功")
-                            memoryUtils.user = result.data
-                            storageUtils.saveUser(result.data)
-                            // 跳转到管理界面
-                            console.log(this.props)
-                            this.props.navigate('/admin')
-                        }else if(result.status === 204){
-                            message.error("用户不存在")
-                        } 
-                       
+                        // let result = await login(value.username, value.password)
+                        // if(result.status === 200 && !result.data.error){
+                        //     console.log(result);
+                        //     message.success("登录成功")
+                        //     memoryUtils.user = result.data
+                        //     storageUtils.saveUser(result.data)
+                        //     // 跳转到管理界面
+                        //     console.log(this.props)
+                        //     this.props.navigate('/admin')
+                        // }else if(result.status === 204){
+                        //     message.error("用户不存在")
+                        // } 
+                       this.props.login(value)
                     }else{
                         message.error("请求失败")
                     }
@@ -124,4 +126,7 @@ class login extends Component {
     }
 }
 
-export default withNavigation(login);
+export default connect(
+    state => ({user: state.user}),
+    {login: loginAction}
+)(withNavigation(Login))

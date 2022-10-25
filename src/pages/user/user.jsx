@@ -79,8 +79,18 @@ export default function User() {
 
     useEffect(() => {
         getUser();
-        getRoleNames(users);
-    }, []);
+        // 生成角色名对象
+        setRoleNames(
+            users.reduce((pre, item) => {
+                pre[item.role_id] = roles.find(
+                    (value) => item.role_id === value._id
+                )
+                    ? roles.find((value) => item.role_id === value._id).name
+                    : "暂未分配角色";
+                return pre;
+            }, {})
+        );
+    }, [users, roles]);
 
     // 获取用户列表
     const getUser = async () => {
@@ -94,19 +104,7 @@ export default function User() {
         }
     };
 
-    // 生成角色名对象
-    const getRoleNames = (users) => {
-        setRoleNames(
-            users.reduce((pre, item) => {
-                pre[item.role_id] = roles.find(
-                    (value) => item.role_id === value._id
-                )
-                    ? roles.find((value) => item.role_id === value._id).name
-                    : "暂未分配角色";
-                return pre;
-            }, {})
-        );
-    };
+    
 
     // 执行ok按钮点击事件
     const handleOk = () => {

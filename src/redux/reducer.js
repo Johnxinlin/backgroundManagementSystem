@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import storageUtils from '../utils/storageUtils'
-import { MENUCLICK, TEST } from './types'
+import { LOGIN_OUT, MENUCLICK, RECEIVE_USER, TEST } from './types' 
 
 /**
  * 用来管理主界面标题的reducer函数
@@ -25,6 +25,10 @@ const initUser = storageUtils.getUser()
 const userReducer = (state=initUser, action) => {
     const {type, data} = action
     switch(type){
+        case RECEIVE_USER:
+            return data
+        case LOGIN_OUT:
+            return {}
         default:
             return state
     }

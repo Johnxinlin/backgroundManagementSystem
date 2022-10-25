@@ -1,8 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { message, Modal, Upload } from 'antd';
 import React, { useImperativeHandle, useState, forwardRef, useEffect } from 'react';
-import { reqDeleteImage } from '../../api';
-import { BASE_IMG_URL } from '../../utils/constants';
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -48,6 +46,8 @@ const App = (props, ref) => {
                     name: item.name,
                     url: item.url
                 }
+            }else{
+              return null
             }
         })
     }

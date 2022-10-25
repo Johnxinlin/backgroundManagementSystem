@@ -6,7 +6,7 @@ import jsonp from "jsonp";
 import request from "./request";
 
 // 用户登录
-export const Login = (username, password) =>
+export const login = (username, password) =>
     request("/user/login/", { username, password }, "POST");
 
 // json接口请求函数
