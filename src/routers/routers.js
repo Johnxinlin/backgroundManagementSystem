@@ -12,6 +12,7 @@ import Pie from '../pages/charts/pie'
 import ProductAddUpdate from '../pages/product/add-update'
 import ProductDetail from '../pages/product/detail'
 import ProductHome from '../pages/product/home'
+import NotFound from '../pages/not-found/not-found'
 const routers = [
     {
         path: '/login',
@@ -79,8 +80,14 @@ const routers = [
     },
     {
         path: '/',
-        element: <Navigate to='/admin'/>
+        element: <Navigate to='/admin'/>,
+        errorElement: <NotFound/> 
     },
+    {
+        path: '*',
+        element: <NotFound/>,
+    },
+
     
 ]
 export default routers;

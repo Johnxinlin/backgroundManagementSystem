@@ -7,9 +7,6 @@ export default function Line() {
   const [stores,setStores] = useState([6, 10, 25, 20, 15, 10])
 
   const getOption = (sales, stores) => ({
-    title: {
-      text: 'ECharts 入门示例'
-    },
     tooltip: {},
     legend: {
       data:['销量', '库存']

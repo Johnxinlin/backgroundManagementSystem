@@ -9,9 +9,6 @@ export default function Bar() {
 
   const getOption = (sales, stores) => {
     return {
-      title: {
-        text: 'ECharts 入门示例'
-      },
       tooltip: {},
       legend: {
         data:['销量', '库存']
