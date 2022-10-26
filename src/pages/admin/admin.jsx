@@ -11,7 +11,7 @@ const Admin = (props) => {
   const navigate = useNavigate()
   useEffect(() => {
     if(!props.user || !props.user.id){
-      navigate("../login")
+      // navigate("../login")
       message.error("您尚未登陆！")
     }
   }, [props.user])

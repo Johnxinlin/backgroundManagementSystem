@@ -1,8 +1,55 @@
 .home{
-    display: flex;
     width: 100%;
     height: 100%;
-    font-size: 30px;
-    align-items: center;
-    justify-content: center;
+    background-color: #fff;
+
+    .home-header{
+        width: 100%;
+        height: 300px;
+        position: relative;
+        .home-statistic-card{
+            position: absolute;
+            top: 8%;
+            left: 2%;
+            width: 20%;
+        }
+        .home-line{
+            position: absolute;
+            right: 2%;
+            width: 70%;
+            height: 300px;
+            background-color: "#fff";
+            margin-top: 10;
+        }
+    }
+    
+    .home-content{
+        position: relative;
+        height: 500px;
+        width: 100%;
+        .home-menu {
+            font-size: 20px;
+            span {
+              cursor: pointer;
+            }
+            .home-menu-active {
+              border-bottom: 2px solid #1DA57A;
+              color: #1DA57A;
+              padding: 0 0 4px 0;
+            }
+            .home-menu-visited {
+              margin-right: 40px;
+            }
+        }
+        .home-table-left {
+            float: left;
+            width: 60%;
+          }
+        .home-table-right {
+            float: right;
+            width: 330px;
+            height: 360px;
+        }
+    }
+   
 }
