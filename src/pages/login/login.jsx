@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Image } from "antd";
 // import { login } from "../../api";
 import memoryUtils from "../../utils/memoryUtils";
 // import storageUtils from "../../utils/storageUtils";
@@ -7,13 +7,17 @@ import { withNavigation } from "../../components/withNavigation";
 import "./login.less";
 import logo from "./images/马卡龙.png";
 import { connect } from "react-redux";
-import { loginAction } from "../../redux/actions";
+import { loginAction, keepUuidAction } from "../../redux/actions";
+import { v4 } from "uuid";
 
 
 const Item = Form.Item;
 
 
 class Login extends Component {
+    state = {
+        verifyPic: ""
+    }
     
     // 登录表单提交完成事件
     onFinish = (values) => {
@@ -23,20 +27,8 @@ class Login extends Component {
             .then(
                 async(value) => {
                     if (/^[a-zA-Z0-9_]+$/.test(value.password)) {
-                        // 请求登录
-                        // let result = await login(value.username, value.password)
-                        // if(result.status === 200 && !result.data.error){
-                        //     console.log(result);
-                        //     message.success("登录成功")
-                        //     memoryUtils.user = result.data
-                        //     storageUtils.saveUser(result.data)
-                        //     // 跳转到管理界面
-                        //     console.log(this.props)
-                        //     this.props.navigate('/admin')
-                        // }else if(result.status === 204){
-                        //     message.error("用户不存在")
-                        // } 
-                       this.props.login(value)
+                        console.log("validateFields: ",value, " uuid: ", this.props.uuid);
+                       this.props.login({...value, uuid:this.props.uuid})
                     }else{
                         message.error("请求失败")
                     }
@@ -50,8 +42,23 @@ class Login extends Component {
         console.log(values);
     };
 
+    resetVerifyCode = () => {
+        const uuid = v4()
+        this.props.saveUuid(uuid)
+        const result = "http://127.0.0.1:8001/users/image/verifiaction/" + uuid
+        console.log("resetVerifyCode(): ", result);
+        this.setState({verifyPic: result})
+    }
+
+    componentDidMount = () => {
+        this.resetVerifyCode()
+    }
+
     render() {
         const user = memoryUtils.user
+        // const user = this.props.user 
+        const {verifyPic} = this.state
+        // console.log(user);
         if(user && user.id){
             console.log(user);
             this.props.navigate("/admin")
@@ -107,7 +114,22 @@ class Login extends Component {
                                 },
                             ]}
                         >
+                            
                             <Input.Password />
+                        </Item>
+                        <Item
+                            label = {<Image height={40} width={140} src={verifyPic} onClick={this.resetVerifyCode}/>}
+                            name="verify" 
+                            className="input"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input your verifyCode!",
+                                },
+                            ]}
+                            
+                        >
+                            <Input/>
                         </Item>
 
                         <Item>
@@ -127,6 +149,6 @@ class Login extends Component {
 }
 
 export default connect(
-    state => ({user: state.user}),
-    {login: loginAction}
+    state => ({user: state.user, uuid: state.uuid}), 
+    {login: loginAction, saveUuid: keepUuidAction}
 )(withNavigation(Login))

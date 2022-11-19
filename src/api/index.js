@@ -6,8 +6,8 @@ import jsonp from "jsonp";
 import request from "./request";
 
 // 用户登录
-export const login = (username, password) =>
-    request("/user/login/", { username, password }, "POST");
+export const login = (username, password, verify, uuid) =>
+    request("/users/login/", { username, password, verify, uuid }, "POST");
 
 // json接口请求函数
 export const reqWeather = () => {
@@ -103,3 +103,4 @@ export const reqDeleteUser = (userId) => {
 export const reqAddOrUpdateUser = (user) => {
     request('/manage/user/' + (user.password ? 'add' : 'update'), user, 'POST')
 }
+

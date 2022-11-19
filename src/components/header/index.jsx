@@ -125,6 +125,6 @@ const Header = (props) => {
 }
 
 export default connect(
-    state => ({title:state.headTitle, username: state.user.name}),
+    state => ({title:state.headTitle, username: state.user.username}),
     {loginOut: loginOutAction}
 )(Header)
